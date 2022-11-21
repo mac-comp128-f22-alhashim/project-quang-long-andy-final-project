@@ -45,8 +45,17 @@ public class Board {
             System.out.println();
         }
     }
-
+    
+    /**
+     * Given the i and j, and the player's turn mark a location on the board. User's friendly input
+     * @param isPlayer0 Player0's turn or not ?
+     * @param i The location of i on the board (1 to 3). 
+     * @param j The location of j on the board (1 to 3)
+     * @return
+     */
     public boolean playerChoose(Boolean isPlayer0, int i, int j ) {
+        i+=-1;
+        j+=-1;
         if ( !(board[i][j] == '-') ) {
             return false;
         }
