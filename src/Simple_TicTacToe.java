@@ -29,9 +29,8 @@ class Simple_TicTacToe {
                 System.out.println("Player 1's (O) turn");
 
             do {    // while loop to check for invalid input
-                System.out.print("What is your i (1-3 only):");
+                System.out.print("What is your move (row[1-3] column[1-3]): ");
                 valueI = scanner.nextInt();
-                System.out.print("What is your j (1-3 only):");
                 valueJ = scanner.nextInt();
                 System.out.println();
             } while (!board.playerChoose(isPlayer0, valueI, valueJ)); // check for invalid input
