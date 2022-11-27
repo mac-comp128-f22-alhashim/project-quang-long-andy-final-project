@@ -26,6 +26,9 @@ public class Board {
         this.board[i][j] = unmarked;
     }
 
+    public char[][] getBoard() {
+        return board;
+    }
 
     public void resetBoard() {
         for (int i=0; i< this.size; i++) {

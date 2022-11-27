@@ -10,13 +10,14 @@ public class AIPlayler {
         {1, 1}, {0, 0}, {0, 2}, {2, 0}, {2, 2},
         {0, 1}, {1, 0}, {1, 2}, {2, 1}};
 
-    private void move() {
+    private int[] move() {
         for (int[] move : preferredMoves) {
-            if (board[move[0]][move[1]] == '-') {
-                return;
+            if (board.getBoard()[move[0]][move[1]] == '-') {
+                return move;
             }
-    
         }
+        assert false : "No empty cell?!";
+        return null;
     }
     
 }
