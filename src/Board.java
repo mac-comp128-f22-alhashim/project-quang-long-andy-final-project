@@ -62,10 +62,12 @@ public class Board {
         if ( !(board[i][j] == '-') ) {
             return false;
         }
-        if (isPlayer0)
+        if (isPlayer0) {
             board[i][j] = 'X';
-        else 
+        }
+        else {
             board[i][j] = 'O';
+        }
         return true;
     }
 

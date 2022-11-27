@@ -10,7 +10,7 @@ public class AIPlayler {
         {1, 1}, {0, 0}, {0, 2}, {2, 0}, {2, 2},
         {0, 1}, {1, 0}, {1, 2}, {2, 1}};
 
-    private int[] move() {
+    public int[] move() {
         for (int[] move : preferredMoves) {
             if (board.getBoard()[move[0]][move[1]] == '-') {
                 return move;
