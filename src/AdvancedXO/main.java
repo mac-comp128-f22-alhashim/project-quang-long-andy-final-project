@@ -1,14 +1,13 @@
-import java.util.ArrayList;
+package AdvancedXO;
+
 import java.util.Scanner;
 
-class Simple_TicTacToe {
-    private static Board board;
-    private static ArrayList<Character> playerMark;
-
+public class main {
+    private static BigBoard board;
+    
     public static void main(String[] args) {
-        board = new Board();
+        board = new BigBoard(7);
         gameRun();
-
     }
 
     public static void gameRun() {
@@ -20,7 +19,6 @@ class Simple_TicTacToe {
             // Clear screen gimmick
             System.out.print("\033[H\033[2J");  
             System.out.flush(); 
-
             board.getPrinted();
             System.out.println();
             if (isPlayer0)
@@ -29,8 +27,9 @@ class Simple_TicTacToe {
                 System.out.println("Player 1's (O) turn");
 
             do {    // while loop to check for invalid input
-                System.out.print("What is your move (row[1-3] column[1-3]): ");
+                System.out.print("What is your i (1-size only):");
                 valueI = scanner.nextInt();
+                System.out.print("What is your j (1-size only):");
                 valueJ = scanner.nextInt();
                 System.out.println();
             } while (!board.playerChoose(isPlayer0, valueI, valueJ)); // check for invalid input
@@ -58,4 +57,5 @@ class Simple_TicTacToe {
         scanner.close();
     }
 
+    
 }

@@ -1,12 +1,14 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Simple_TicTacToe {
+class Simple_TicTacToe_AI {
     private static Board board;
     private static ArrayList<Character> playerMark;
+    private static AIPlayler bot;
 
     public static void main(String[] args) {
         board = new Board();
+        bot = new AIPlayler(board);
         gameRun();
 
     }
@@ -23,16 +25,19 @@ class Simple_TicTacToe {
 
             board.getPrinted();
             System.out.println();
-            if (isPlayer0)
-                System.out.println("Player 0's (X) turn:");
-            else
-                System.out.println("Player 1's (O) turn");
 
             do {    // while loop to check for invalid input
-                System.out.print("What is your move (row[1-3] column[1-3]): ");
-                valueI = scanner.nextInt();
-                valueJ = scanner.nextInt();
-                System.out.println();
+                if (isPlayer0) {
+                    System.out.println("Player 0's (X) turn:");
+                    System.out.print("What is your move (row[1-3] column[1-3]): ");
+                    valueI = scanner.nextInt();
+                    valueJ = scanner.nextInt();
+                    System.out.println();
+                } else {
+                    int[] move = bot.move();
+                    valueI = move[0];
+                    valueJ = move[1];
+                }
             } while (!board.playerChoose(isPlayer0, valueI, valueJ)); // check for invalid input
 
             // if playerX won
