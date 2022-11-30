@@ -1,9 +1,14 @@
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.MouseInputListener;
+
+import org.w3c.dom.events.MouseEvent;  
 
 // This component attempts to create a window that visualizes the board
 // based on a 2d arrary imput.
 
-public class WindowCanvas {
+public class WindowCanvas{
     
     private char[][] board;
     private boolean[][] boardCheck;
@@ -18,24 +23,32 @@ public class WindowCanvas {
         this.boardCheck = new boolean[rowNum][colNum];
 
 
-        Frame f = new Frame();
+        JFrame f = new JFrame();
         f.setTitle("ttt");
-        f.setSize(rowNum*tileSize,colNum*tileSize+offSet);
-        f.setVisible(true);
+        f.setSize(rowNum*tileSize,colNum*tileSize+offSet*2);
+        
         f.setResizable(false);
-
+        f.setLayout(null);
 
         for (int i=0; i<rowNum; i++){
             for (int j=0; j<colNum; j++){
-                Button b = new Button();
+                JButton b = new JButton();
+                b.setBackground(Color.WHITE);
                 char tc = this.board[i][j]; // tile character
                 if (tc == 'x' || tc == 'o'){
-                    b.setLabel(Character.toString(tc));
+                    b.setText(Character.toString(tc));
                 }
                 b.setBounds(tileSize*(i),tileSize*(j)+offSet,tileSize,tileSize);
+                b.addActionListener(new ActionListener(){
+                    public void ActionListener() e){
+                        b.setBackground(Color.blue);
+                    }
+                })
                 f.add(b);
             }
         }
+        f.setVisible(true);
+
     }
 
     public static void main (String[] args){
