@@ -8,7 +8,6 @@ class Simple_TicTacToe_AI {
 
     public static void main(String[] args) {
         board = new Board();
-        bot = new AIPlayler(board);
         gameRun();
 
     }
@@ -28,16 +27,18 @@ class Simple_TicTacToe_AI {
 
             do {    // while loop to check for invalid input
                 if (isPlayer0) {
-                    System.out.println("Player 0's (X) turn:");
                     System.out.print("What is your move (row[1-3] column[1-3]): ");
                     valueI = scanner.nextInt();
                     valueJ = scanner.nextInt();
                     System.out.println();
                 } else {
+                    bot = new AIPlayler(board);
                     int[] move = bot.move();
                     valueI = move[0];
                     valueJ = move[1];
                 }
+
+                isPlayer0 = !isPlayer0;
             } while (!board.playerChoose(isPlayer0, valueI, valueJ)); // check for invalid input
 
             // if playerX won
@@ -58,7 +59,7 @@ class Simple_TicTacToe_AI {
                 break;
             }
             // if not then continue
-            isPlayer0 = !isPlayer0; // Switch turn
+             // Switch turn
         }
         scanner.close();
     }
