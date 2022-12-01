@@ -1,13 +1,11 @@
 import java.awt.Color;
 import java.io.File;
-import java.net.URL;
 
-import javax.print.attribute.standard.Media;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
+
 
 import edu.macalester.graphics.*;
 import edu.macalester.graphics.ui.*;
