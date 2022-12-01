@@ -1,4 +1,13 @@
 import java.awt.Color;
+import java.io.File;
+import java.net.URL;
+
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 
 import edu.macalester.graphics.*;
 import edu.macalester.graphics.ui.*;
@@ -21,6 +30,7 @@ public class WindowCanvas {
     private int winheight;
 
     public WindowCanvas(char[][] board){
+        makeSound("./src/soundfx/sound of death.wav");
         this.board = board;
         
         int rowNum = this.board.length;
@@ -41,6 +51,7 @@ public class WindowCanvas {
        
 
     private void mouseClick(MouseButtonEvent event){
+        makeSound("./src/soundfx/ding dong.wav");
         Point p = event.getPosition();
         if (p.getY()>offSet){
             GraphicsObject o = f.getElementAt(p);
@@ -82,8 +93,24 @@ public class WindowCanvas {
         }
     }
 
+    public void makeSound(String location){
+        try {
+            File f = new File(location);
+            if (f.exists()){
+                AudioInputStream ip = AudioSystem.getAudioInputStream(f);
+                Clip clip = AudioSystem.getClip();
+                clip.open(ip);
+                clip.start();
+            }
+            else{
+                System.out.println("can't find file");
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
     
-  
+    }
 
     public static void main (String[] args){
         char[][] board = new char[3][3];
