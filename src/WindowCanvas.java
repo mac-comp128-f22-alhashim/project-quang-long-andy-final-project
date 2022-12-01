@@ -42,12 +42,15 @@ public class WindowCanvas {
 
     private void mouseClick(MouseButtonEvent event){
         Point p = event.getPosition();
-        GraphicsObject o = f.getElementAt(p);
-        if (o!=null){
-            int row = (int)Math.floor(p.getX()/squareSize);
-            int col = (int)Math.floor((p.getY()-offSet)/squareSize);
-            if 
+        if (p.getY()>offSet){
+            GraphicsObject o = f.getElementAt(p);
+            if (o!=null){
+                int row = (int)Math.floor(p.getX()/squareSize);
+                int col = (int)Math.floor((p.getY()-offSet)/squareSize);
+                System.out.println(row + "     "+ col);
+            }
         }
+
         
     }
     private void drawLine(int rowNum, int colNum){
