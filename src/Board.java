@@ -19,6 +19,10 @@ public class Board {
         return markX;
     }
 
+    public char[][] getBoard(){
+        return board;
+    }
+
     public char getPlayer1Mark() {
         return markO;
     }
