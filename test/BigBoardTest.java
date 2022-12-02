@@ -1,10 +1,12 @@
-package AdvancedXO;
+// Test bigboard win condition and behavior
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class UnitTest {
+import AdvancedXO.BigBoard;
+
+public class BigBoardTest {
     @Test
     public void testWinConEmpty() {
         BigBoard board = new BigBoard(4);

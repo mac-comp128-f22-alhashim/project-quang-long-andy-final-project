@@ -1,9 +1,10 @@
 public class Board {
     private int size =3;
+    private int filled = 0;
     private char[][] board;
     private char unmarked = '-';
-    private char markO = 'O';
-    private char markX = 'X'; 
+    private char markO = 'O';  //Player 1's mark
+    private char markX = 'X';  //Player 0's mark
 
     public Board() {
         this.board = new char[size][size];
@@ -14,19 +15,38 @@ public class Board {
         return this.size;
     }
 
-    public void markO(int i, int j) {
-        this.board[i][j] = markO;
+    public Character getPlayer0Mark() {
+        return markX;
     }
 
-    public void markX(int i, int j) {
-        this.board[i][j] = markX;
+    public char getPlayer1Mark() {
+        return markO;
+    }
+
+    public char getPosition(int friendlyI, int friendlyJ) {
+        return board[friendlyI-1][friendlyJ-1];
+    }
+    /**
+     * 
+     * @return unmark char
+     */
+    public char getBlankMark() {
+        return unmarked;
+    }
+
+    /**
+     * 
+     * @return How many marks have been filled
+     */
+    public int getFilledCount() {
+        return filled;
     }
 
     public void unmarked(int i, int j) {
         this.board[i][j] = unmarked;
     }
 
-    public char[][] getBoard() {
+    public char[][] getMatrixData() {
         return board;
     }
 
@@ -63,11 +83,12 @@ public class Board {
             return false;
         }
         if (isPlayer0) {
-            board[i][j] = 'X';
+            board[i][j] = markX;
         }
         else {
-            board[i][j] = 'O';
+            board[i][j] = markO;
         }
+        filled++;
         return true;
     }
 
@@ -109,7 +130,7 @@ public class Board {
      * @return null if 3 chars concatenated are similar, 'XXX', or 'OOO' if char0=char1=char2
      */
     public String addString(char char0, char char1, char char2) {
-        if (char0 == '-' || char1 == '-' || char2 == '-') {
+        if (char0 == unmarked || char1 == unmarked || char2 == unmarked) {
             return null;
         }
         if  (! ((char0 == char1) && (char1==char2) ) ) {
@@ -123,13 +144,19 @@ public class Board {
     /**
      * 
      * @param charSeq
-     * @return 0 if string is "XXX", 1 if string is "OOO"
+     * @return 0 if player0 got 3 in a row, 1 if player1 got 3 in a row
      */
     public int identifyXO(String charSeq) {
-        if (charSeq.equals("XXX")) {
+        String markXSeq = (new StringBuilder()).append(markX).
+                            append(markX).
+                            append(markX).toString();  
+        String markOSeq = (new StringBuilder()).append(markO).
+                            append(markO).
+                            append(markO).toString();  
+        if (charSeq.equals(markXSeq)) {
             return 0;
         }
-        else if (charSeq.equals("OOO")) {
+        else if (charSeq.equals(markOSeq)) {
             return 1;
         }
         else {

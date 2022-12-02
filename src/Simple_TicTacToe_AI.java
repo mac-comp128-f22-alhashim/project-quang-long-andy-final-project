@@ -32,13 +32,11 @@ class Simple_TicTacToe_AI {
                     valueJ = scanner.nextInt();
                     System.out.println();
                 } else {
-                    bot = new AIPlayler(board);
-                    int[] move = bot.move();
+                    bot = new AIPlayler();
+                    int[] move = bot.move(board);
                     valueI = move[0];
                     valueJ = move[1];
                 }
-
-                isPlayer0 = !isPlayer0;
             } while (!board.playerChoose(isPlayer0, valueI, valueJ)); // check for invalid input
 
             // if playerX won
@@ -60,6 +58,7 @@ class Simple_TicTacToe_AI {
             }
             // if not then continue
              // Switch turn
+             isPlayer0 = !isPlayer0;
         }
         scanner.close();
     }
