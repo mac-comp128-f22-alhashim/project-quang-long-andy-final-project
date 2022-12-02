@@ -23,6 +23,14 @@ public class Board {
         return markO;
     }
 
+    // Friendly means based-1 index, non-friendly means based0-computer science index
+
+    /**
+     * 
+     * @param friendlyI
+     * @param friendlyJ
+     * @return get a mark at given friendly positions
+     */
     public char getPosition(int friendlyI, int friendlyJ) {
         return board[friendlyI-1][friendlyJ-1];
     }
@@ -68,7 +76,26 @@ public class Board {
             System.out.println();
         }
     }
+
+    /**
+     * Check if the player can mark given a position
+     * @param indexI
+     * @param indexJ
+     * @return
+     */
+    public boolean isValid(int indexI, int indexJ) {
+        return (indexI<=3 && indexI>=1 && indexJ<=3 && indexJ>=0) && (board[indexI-1][indexJ-1] == unmarked);
+    }
     
+    public void markX(int friendlyI, int friendlyJ) {
+        board[friendlyI-1][friendlyJ-1] = markX;
+        filled++;
+    }
+
+    public void markO(int friendlyI, int friendlyJ) {
+        board[friendlyI-1][friendlyJ-1] = markO;
+        filled++;
+    }
     /**
      * Given the i and j, and the player's turn mark a location on the board. User's friendly input
      * @param isPlayer0 Player0's turn or not ?
