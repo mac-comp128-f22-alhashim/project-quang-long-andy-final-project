@@ -1,6 +1,6 @@
 import java.awt.Color;
 import java.io.File;
-
+import java.time.OffsetTime;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -33,6 +33,8 @@ public class WindowCanvas {
     private boolean isWon = false;
     private boolean color = true; // true = default, white
 
+    private GraphicsGroup uiGroup;
+
 
     public WindowCanvas(Board board){
         this.board = board;
@@ -46,13 +48,18 @@ public class WindowCanvas {
 
         f = new CanvasWindow("TTT", winwidth, winheight);
 
-        setUp(rowNum, colNum);
         f.onMouseMove(event->mouseMove(event));
+        Button x = new Button("getSize");
+        x.onClick(()->diagprint());
+        f.add(x,0,50);
+
+        setUpTest(rowNum, colNum);
         f.onClick(event->mouseClick(event));
     }
 
-    private void mouseMove(MouseMotionEvent event){
-
+    void diagprint(){
+        System.out.println(f.getHeight()+" .  " + f.getWidth());
+        reposition();
     }
 
     private void togglePlayer(){
@@ -201,6 +208,8 @@ public class WindowCanvas {
         f.add(t,0,10);
     }
 
+
+
     private void toggleColor(){
         makeSound("./res/soundfx/restart.wav");
       
@@ -243,5 +252,56 @@ public class WindowCanvas {
         Board a = new Board();
         WindowCanvas test = new WindowCanvas(a);
 
+    }
+
+    private void setUpTest(int rowNum, int colNum){
+        uiGroup = new GraphicsGroup();
+        for (int i = 0; i<colNum+1 ; i++){
+            //vertical
+            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,winheight-3*lw);
+            line.setStrokeWidth(lw);
+            Color c = new Color(60,128,180,100);
+            line.setStrokeColor(c);
+            uiGroup.add(line);
+        }
+        
+        for (int i = 0; i<rowNum+1;i++){
+            //horizontal
+            Line line = new Line(lw, offSet+i*squareSize,winwidth-lw,offSet+i*squareSize);
+            line.setStrokeWidth(lw);
+            Color c = new Color(60,128,180,100);
+            line.setStrokeColor(c);
+            uiGroup.add(line);
+        }
+
+        for (int i = 0; i<colNum; i++){
+            for (int j = 0; j<rowNum; j++){
+                double x = i*squareSize+lw+squareSize*.05;
+                double y = j*squareSize+offSet+.05*squareSize;
+                Rectangle r = new Rectangle(x, y, squareSize*.9,squareSize*.9);
+                r.setFillColor(new Color(101,177,51,30));
+                r.setStroked(false);
+                uiGroup.add(r);
+            }
+        }
+
+        f.add(uiGroup,0,0);
+
+        turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+        if (color==true){
+            turnLabel.setFillColor(new Color(0,0,0,230));
+        }
+        else  {turnLabel.setFillColor(new Color(226,226,226,230));}
+        f.add(turnLabel);
+
+        t = new Button("Change Color");
+        t.onClick(()-> toggleColor());
+        t.setScale(10,10);
+        f.add(t,0,10);
+    }
+
+    private void reposition(){
+        uiGroup.setCenter(f.getCenter());
     }
 }
