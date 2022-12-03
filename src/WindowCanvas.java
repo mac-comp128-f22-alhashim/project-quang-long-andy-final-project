@@ -1,11 +1,11 @@
 import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
 
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
 
 import edu.macalester.graphics.*;
@@ -22,17 +22,19 @@ public class WindowCanvas {
     
     private Board board;
     private CanvasWindow f; // "frame"
-    private int squareSize = 100;
-    private int offSet = 170; // top vertical space
+    private int squareSize = 200;
+    private int offSet = squareSize; // top vertical space
     private int lw = 7; // line width 
     private int winwidth;
     private int winheight;
     private boolean isPlayer0 = true;
     private GraphicsText turnLabel;
+    private Button t;
     private boolean isWon = false;
+    private boolean color = true; // true = default, white
+
 
     public WindowCanvas(Board board){
-        // makeSound("./src/soundfx/sound of death.wav")
         this.board = board;
         
         int rowNum = this.board.getBoard().length;
@@ -43,7 +45,6 @@ public class WindowCanvas {
 
 
         f = new CanvasWindow("TTT", winwidth, winheight);
-        
 
         setUp(rowNum, colNum);
         f.onMouseMove(event->mouseMove(event));
@@ -51,10 +52,11 @@ public class WindowCanvas {
     }
 
     private void mouseMove(MouseMotionEvent event){
+
     }
 
     private void togglePlayer(){
-        turnLabel.setFont("Courier, Comic Sans MS, Helvetica",FontStyle.BOLD_ITALIC, winwidth/8);
+        turnLabel.setFont("Helvetica",FontStyle.BOLD_ITALIC, winwidth/8);
         if (isPlayer0 == true) {
             isPlayer0 = false; 
             turnLabel.setText("O's turn");
@@ -93,14 +95,14 @@ public class WindowCanvas {
 
     private void addImage(int row, int col){
         if (isPlayer0==true){
-            double x = row*squareSize+1.5*lw;
+            double x = row*squareSize+lw+squareSize*.05;
             double y = offSet+col*squareSize+lw;
             Image a = new Image(x, y,"./imgs/X.png");
             a.setMaxWidth(squareSize*.9);
             f.add(a);
         }
         else{
-            double x = row*squareSize+1.5*lw;
+            double x = row*squareSize+lw+squareSize*.05;
             double y = offSet+col*squareSize+lw;
             Image a = new Image(x, y,"./imgs/O.png");
             a.setMaxWidth(squareSize*.9);
@@ -111,14 +113,48 @@ public class WindowCanvas {
     private void checkWin(){
         if (board.checkWin() == 1 || board.checkWin() == 0){
             makeSound("./res/soundfx/win.wav");
-            turnLabel.setText("The End");
+
+            f.remove(turnLabel);
+            turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
             turnLabel.setFillColor(new Color(0,119,36,255));
-            turnLabel.setFont("Tahoma",FontStyle.PLAIN,winwidth/10);
+            turnLabel.setText("The End");
+            f.add(turnLabel);
+
             isWon = true;
         }
         else{
-            togglePlayer();
+            if (board.getFilledCount()!= board.getSize()*board.getSize() ){
+                togglePlayer();
+            }
+            else{
+                makeSound("./res/soundfx/fail.wav");
+                f.remove(turnLabel);
+                turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+                turnLabel.setText("The End");
+                turnLabel.setFillColor(new Color(192,0,0,220));
+                f.add(turnLabel);
+
+                isWon = true;
+            }
         }
+        if (isWon==true){
+            Button b  = new Button("restart");
+            b.setPosition(f.getCenter());
+            b.setScale(100);
+            b.onClick(()->restart());
+            f.add(b,winwidth/2-b.getScaleX()/2,3*offSet/4);
+        }
+    }
+
+    private void restart(){
+        isWon=false;
+        isPlayer0=true;
+        f.removeAll();
+        board.resetBoard();
+        setUp(board.getSize(), board.getSize());
+        makeSound("./res/soundfx/restart.wav");
     }
 
     private void setUp(int rowNum, int colNum){
@@ -142,20 +178,49 @@ public class WindowCanvas {
 
         for (int i = 0; i<colNum; i++){
             for (int j = 0; j<rowNum; j++){
-                Rectangle r = new Rectangle(i*squareSize+lw,j*squareSize+offSet, squareSize,squareSize);
+                double x = i*squareSize+lw+squareSize*.05;
+                double y = j*squareSize+offSet+.05*squareSize;
+                Rectangle r = new Rectangle(x, y, squareSize*.9,squareSize*.9);
                 r.setFillColor(new Color(101,177,51,30));
                 r.setStroked(false);
                 f.add(r);
             }
         }
 
-        turnLabel = new GraphicsText("Begin",winwidth/4,offSet/2);
+        turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
         turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+        if (color==true){
+            turnLabel.setFillColor(new Color(0,0,0,230));
+        }
+        else  {turnLabel.setFillColor(new Color(226,226,226,230));}
         f.add(turnLabel);
+
+        t = new Button("Change Color");
+        t.onClick(()-> toggleColor());
+        t.setScale(10,10);
+        f.add(t,0,10);
     }
 
+    private void toggleColor(){
+        makeSound("./res/soundfx/restart.wav");
+      
+        if (color==true){
+            f.setBackground(new Color(0,0,0,220));
+            if (turnLabel.getText().toLowerCase().equals("begin")){
+                turnLabel.setFillColor(new Color(226,226,226,230));}
+            color=false;
+        }
+        else{
+            f.setBackground(new Color(255,255,255,255));
+            if (turnLabel.getText().toLowerCase().equals("begin")){
+                turnLabel.setFillColor(new Color(0,0,0,230));}
+            color = true;
+        }
+    
+    } 
 
-    public void makeSound(String location){
+
+    private void makeSound(String location){
         try {
             File f = new File(location);
             if (f.exists()){

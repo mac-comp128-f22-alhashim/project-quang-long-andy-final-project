@@ -68,6 +68,7 @@ public class Board {
                 this.board[i][j] = unmarked;
             }
         }
+        filled=0;
     }
 
     public void getPrinted() {
