@@ -27,6 +27,7 @@ public class BigBoardTest {
         board.playerChoose(true, 6, 1);
         board.playerChoose(true, 4, 1);
         assertEquals(0, board.checkWin());
+        assertEquals(5, board.getFilledCount());
     }
     
     @Test
