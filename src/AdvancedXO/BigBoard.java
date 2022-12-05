@@ -1,6 +1,7 @@
 /** 5 in a row instead of 3, size is 20 */
 package AdvancedXO;
 
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -9,6 +10,7 @@ import java.util.Queue;
 public class BigBoard {
     private int size; private int defaultSize = 12;
     private char[][] board;
+    private int filled = 0;
     private char unmarked = '-';
     private char markO = 'O';
     private char markX = 'X'; 
@@ -34,10 +36,12 @@ public class BigBoard {
 
     public void markO(int i, int j) {
         this.board[i][j] = markO;
+        filled++;
     }
 
     public void markX(int i, int j) {
         this.board[i][j] = markX;
+        filled++;
     }
 
     public void unmarked(int i, int j) {
@@ -51,6 +55,19 @@ public class BigBoard {
                 this.board[i][j] = unmarked;
             }
         }
+        filled=0;
+    }
+
+    public char[][] getBoard(){
+        return board;
+    }
+
+    /**
+     * 
+     * @return How many marks have been filled
+     */
+    public int getFilledCount() {
+        return filled;
     }
 
     public void getPrinted() {
@@ -97,6 +114,7 @@ public class BigBoard {
             board[i][j] = 'O';
         recentI = i; // Zero-based world
         recentJ = j;
+        filled++;
         return true;
     }
 

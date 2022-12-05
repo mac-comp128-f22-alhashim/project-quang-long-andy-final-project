@@ -1,3 +1,5 @@
+package AdvancedXO;
+
 import java.awt.Color;
 import java.io.File;
 import java.time.OffsetTime;
@@ -18,13 +20,13 @@ import edu.macalester.graphics.events.*;
 // This component attempts to create a window that visualizes the board
 // based on a 2d arrary imput.
 
-public class WindowCanvas {
+public class BigWindowCanvas {
     
-    private Board board;
+    private BigBoard board;
     private CanvasWindow f; // "frame"
-    private int squareSize = 200;
+    private int squareSize = 100;
     private int offSet = squareSize; // top vertical space
-    private int lw = 7; // line width 
+    private int lw = 3; // line width 
     private int winwidth;
     private int winheight;
     private boolean isPlayer0 = true;
@@ -36,11 +38,11 @@ public class WindowCanvas {
     private GraphicsGroup uiGroup;
 
 
-    public WindowCanvas(Board board){
+    public BigWindowCanvas(BigBoard board){
         this.board = board;
         
-        int rowNum = this.board.getBoard().length;
-        int colNum = this.board.getBoard()[0].length;
+        int rowNum = this.board.getSize();
+        int colNum = this.board.getSize();
 
         winwidth = colNum * squareSize + (colNum-1)*lw;
         winheight = offSet + rowNum * squareSize + rowNum*lw;
@@ -48,6 +50,7 @@ public class WindowCanvas {
 
         f = new CanvasWindow("TTT", winwidth, winheight);
 
+        // f.onMouseMove(event->mouseMove(event));
         Button x = new Button("getSize");
         x.onClick(()->diagprint());
         f.add(x,0,50);
@@ -248,8 +251,8 @@ public class WindowCanvas {
     }
 
     public static void main (String[] args){
-        Board a = new Board();
-        WindowCanvas test = new WindowCanvas(a);
+        BigBoard a = new BigBoard(5);
+        BigWindowCanvas test = new BigWindowCanvas(a);
 
     }
 
@@ -302,7 +305,5 @@ public class WindowCanvas {
 
     private void reposition(){
         uiGroup.setCenter(f.getCenter());
-        f.draw();
-        f.pause(5);
     }
 }
