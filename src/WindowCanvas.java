@@ -39,8 +39,8 @@ public class WindowCanvas {
     public WindowCanvas(Board board){
         this.board = board;
         
-        int rowNum = this.board.getBoard().length;
-        int colNum = this.board.getBoard()[0].length;
+        int rowNum = this.board.getSize()
+        int colNum = this.board.getSize();
 
         winwidth = colNum * squareSize + (colNum-1)*lw;
         winheight = offSet + rowNum * squareSize + rowNum*lw;
@@ -48,7 +48,6 @@ public class WindowCanvas {
 
         f = new CanvasWindow("TTT", winwidth, winheight);
 
-        // f.onMouseMove(event->mouseMove(event));
         Button x = new Button("getSize");
         x.onClick(()->diagprint());
         f.add(x,0,50);
@@ -303,5 +302,7 @@ public class WindowCanvas {
 
     private void reposition(){
         uiGroup.setCenter(f.getCenter());
+        f.draw();
+        f.pause(5);
     }
 }

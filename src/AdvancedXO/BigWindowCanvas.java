@@ -24,9 +24,9 @@ public class BigWindowCanvas {
     
     private BigBoard board;
     private CanvasWindow f; // "frame"
-    private int squareSize = 100;
-    private int offSet = squareSize; // top vertical space
-    private int lw = 3; // line width 
+    private int squareSize = 70;
+    private int offSet = squareSize*2; // top vertical space
+    private int lw = (int)squareSize/20; // line width 
     private int winwidth;
     private int winheight;
     private boolean isPlayer0 = true;
@@ -44,13 +44,11 @@ public class BigWindowCanvas {
         int rowNum = this.board.getSize();
         int colNum = this.board.getSize();
 
-        winwidth = colNum * squareSize + (colNum-1)*lw;
-        winheight = offSet + rowNum * squareSize + rowNum*lw;
+        winwidth = colNum * squareSize+2*lw;
+        winheight = offSet + rowNum * squareSize + 2*lw;
 
 
         f = new CanvasWindow("TTT", winwidth, winheight);
-
-        // f.onMouseMove(event->mouseMove(event));
         Button x = new Button("getSize");
         x.onClick(()->diagprint());
         f.add(x,0,50);
@@ -125,7 +123,7 @@ public class BigWindowCanvas {
 
             f.remove(turnLabel);
             turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
-            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
             turnLabel.setFillColor(new Color(0,119,36,255));
             turnLabel.setText("The End");
             f.add(turnLabel);
@@ -140,7 +138,7 @@ public class BigWindowCanvas {
                 makeSound("./res/soundfx/fail.wav");
                 f.remove(turnLabel);
                 turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
-                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
                 turnLabel.setText("The End");
                 turnLabel.setFillColor(new Color(192,0,0,220));
                 f.add(turnLabel);
@@ -197,7 +195,7 @@ public class BigWindowCanvas {
         }
 
         turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
         if (color==true){
             turnLabel.setFillColor(new Color(0,0,0,230));
         }
@@ -251,7 +249,7 @@ public class BigWindowCanvas {
     }
 
     public static void main (String[] args){
-        BigBoard a = new BigBoard(5);
+        BigBoard a = new BigBoard(9);
         BigWindowCanvas test = new BigWindowCanvas(a);
 
     }
@@ -290,7 +288,7 @@ public class BigWindowCanvas {
         f.add(uiGroup,0,0);
 
         turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
         if (color==true){
             turnLabel.setFillColor(new Color(0,0,0,230));
         }
