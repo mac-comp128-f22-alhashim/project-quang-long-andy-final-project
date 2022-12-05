@@ -48,7 +48,6 @@ public class WindowCanvas {
 
         f = new CanvasWindow("TTT", winwidth, winheight);
 
-        f.onMouseMove(event->mouseMove(event));
         Button x = new Button("getSize");
         x.onClick(()->diagprint());
         f.add(x,0,50);
@@ -303,5 +302,7 @@ public class WindowCanvas {
 
     private void reposition(){
         uiGroup.setCenter(f.getCenter());
+        f.draw();
+        f.pause(5);
     }
 }
