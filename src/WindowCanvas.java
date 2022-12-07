@@ -147,9 +147,9 @@ public class WindowCanvas {
             else{
                 makeSound("./res/soundfx/fail.wav");
                 f.remove(turnLabel);
-                turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+                turnLabel = new GraphicsText("Draw",winwidth/5,offSet/1.5);
                 turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
-                turnLabel.setText("The End");
+                turnLabel.setText("Draw");
                 turnLabel.setFillColor(new Color(192,0,0,220));
                 f.add(turnLabel);
 
