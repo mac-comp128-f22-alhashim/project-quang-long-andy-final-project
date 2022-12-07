@@ -37,8 +37,7 @@ public class BigWindowCanvas {
 
     private GraphicsGroup uiGroup;
 
-
-    public BigWindowCanvas(BigBoard board){
+    private BigWindowCanvas(BigBoard board){
         this.board = board;
         
         int rowNum = this.board.getSize();
@@ -69,7 +68,8 @@ public class BigWindowCanvas {
             turnLabel.setText("O's turn");
             turnLabel.setFillColor(new Color(51,186,215,220));
         }
-        else {isPlayer0=true; 
+        else {
+            isPlayer0=true; 
             turnLabel.setText("X's turn");
             turnLabel.setFillColor(new Color(215,169,51,220));
     }
