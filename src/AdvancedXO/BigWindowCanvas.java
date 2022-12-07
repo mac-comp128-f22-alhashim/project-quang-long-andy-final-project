@@ -118,14 +118,25 @@ public class BigWindowCanvas {
     }
 
     private void checkWin(){
-        if (board.checkWin() == 1 || board.checkWin() == 0){
+        if (board.checkWin() == 1){
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+            turnLabel = new GraphicsText("Player O won",winwidth/5,offSet/1.5);
             turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
             turnLabel.setFillColor(new Color(0,119,36,255));
-            turnLabel.setText("The End");
+            turnLabel.setText("Player O won");
+            f.add(turnLabel);
+
+            isWon = true;
+        } else if (board.checkWin() == 0) {
+            makeSound("./res/soundfx/win.wav");
+
+            f.remove(turnLabel);
+            turnLabel = new GraphicsText("Player X won",winwidth/5,offSet/1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
+            turnLabel.setFillColor(new Color(0,119,36,255));
+            turnLabel.setText("Player X won");
             f.add(turnLabel);
 
             isWon = true;
@@ -137,9 +148,9 @@ public class BigWindowCanvas {
             else{
                 makeSound("./res/soundfx/fail.wav");
                 f.remove(turnLabel);
-                turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+                turnLabel = new GraphicsText("Draw",winwidth/5,offSet/1.5);
                 turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
-                turnLabel.setText("The End");
+                turnLabel.setText("Draw");
                 turnLabel.setFillColor(new Color(192,0,0,220));
                 f.add(turnLabel);
 

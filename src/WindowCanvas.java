@@ -121,7 +121,7 @@ public class WindowCanvas {
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("Player 1 won",winwidth/5,offSet/1.5);
+            turnLabel = new GraphicsText("Player O won",winwidth/5,offSet/1.5);
             turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
             turnLabel.setFillColor(new Color(0,119,36,255));
             turnLabel.setText("Player O won");
@@ -132,7 +132,7 @@ public class WindowCanvas {
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("Player 0 won",winwidth/5,offSet/1.5);
+            turnLabel = new GraphicsText("Player X won",winwidth/5,offSet/1.5);
             turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
             turnLabel.setFillColor(new Color(0,119,36,255));
             turnLabel.setText("Player X won");
