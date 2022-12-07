@@ -18,9 +18,10 @@ import edu.macalester.graphics.events.*;
 // This component attempts to create a window that visualizes the board
 // based on a 2d arrary imput.
 
-public class WindowCanvas {
+public class WindowCanvasAI {
     
     private Board board;
+    private AIPlayler aiPlayer;
     private CanvasWindow f; // "frame"
     private int squareSize = 200;
     private int offSet = squareSize; // top vertical space
@@ -36,9 +37,9 @@ public class WindowCanvas {
     private GraphicsGroup uiGroup;
 
 
-    public WindowCanvas(Board board){
+    public WindowCanvasAI(Board board){
         this.board = board;
-        
+        aiPlayer = new AIPlayler();
         int rowNum = this.board.getSize();
         int colNum = this.board.getSize();
 
@@ -117,30 +118,19 @@ public class WindowCanvas {
     }
 
     private void checkWin(){
-        if (board.checkWin() == 1){
+        if (board.checkWin() == 1 || board.checkWin() == 0){
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("Player 1 won",winwidth/5,offSet/1.5);
-            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
+            turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
             turnLabel.setFillColor(new Color(0,119,36,255));
-            turnLabel.setText("Player O won");
-            f.add(turnLabel);
-
-            isWon = true;
-        } else if (board.checkWin() == 0) {
-            makeSound("./res/soundfx/win.wav");
-
-            f.remove(turnLabel);
-            turnLabel = new GraphicsText("Player 0 won",winwidth/5,offSet/1.5);
-            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
-            turnLabel.setFillColor(new Color(0,119,36,255));
-            turnLabel.setText("Player X won");
+            turnLabel.setText("The End");
             f.add(turnLabel);
 
             isWon = true;
         }
-        else {
+        else{
             if (board.getFilledCount()!= board.getSize()*board.getSize() ){
                 togglePlayer();
             }
