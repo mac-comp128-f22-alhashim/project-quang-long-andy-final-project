@@ -39,7 +39,7 @@ public class WindowCanvas {
     public WindowCanvas(Board board){
         this.board = board;
         
-        int rowNum = this.board.getSize()
+        int rowNum = this.board.getSize();
         int colNum = this.board.getSize();
 
         winwidth = colNum * squareSize + (colNum-1)*lw;

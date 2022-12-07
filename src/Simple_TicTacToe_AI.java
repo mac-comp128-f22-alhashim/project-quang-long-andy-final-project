@@ -13,35 +13,35 @@ class Simple_TicTacToe_AI {
     }
 
     public static void gameRun() {
-        Boolean isPlayer0 = true;
         Scanner scanner = new Scanner(System.in);
-        Integer valueI = 0;
-        Integer valueJ = 0;
-        for (int i = 0; i < board.getSize()*board.getSize(); i++) {
+        RealMiniMax ai = new RealMiniMax();
+        Integer count = 0;
+        Integer I, J;
+
+        while (true) {
+            // Player AI
+            ai.bestMove(board);
+            board.markX(ai.bestMove[0]+1, ai.bestMove[1]+1);
+            count++;
             // Clear screen gimmick
-            System.out.print("\033[H\033[2J");  
-            System.out.flush(); 
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
 
             board.getPrinted();
             System.out.println();
 
-            do {    // while loop to check for invalid input
-                if (isPlayer0) {
-                    System.out.print("What is your move (row[1-3] column[1-3]): ");
-                    valueI = scanner.nextInt();
-                    valueJ = scanner.nextInt();
-                    System.out.println();
-                } else {
-                    bot = new AIPlayler();
-                    int[] move = bot.move(board);
-                    valueI = move[0];
-                    valueJ = move[1];
-                }
-            } while (!board.playerChoose(isPlayer0, valueI, valueJ)); // check for invalid input
+            do {
+                System.out.println("Friendly I:");
+                I = scanner.nextInt();
+                System.out.println("Friendly J:");
+                J = scanner.nextInt();
+                
+            } while(!board.playerChoose(false, I, J));
+            
 
             // if playerX won
             if (board.checkWin() == 0) {
-                System.out.print("\033[H\033[2J");  
+                System.out.print("\033[H\033[2J");
                 System.out.flush();
                 board.getPrinted();
                 System.out.println("Player 0 (X) won");
@@ -50,17 +50,16 @@ class Simple_TicTacToe_AI {
 
             // if playerO won
             else if (board.checkWin() == 1) {
-                System.out.print("\033[H\033[2J");  
+                System.out.print("\033[H\033[2J");
                 System.out.flush();
                 board.getPrinted();
                 System.out.println("Player 1 (O) won");
                 break;
             }
-            // if not then continue
-             // Switch turn
-             isPlayer0 = !isPlayer0;
+
         }
         scanner.close();
     }
 
 }
+

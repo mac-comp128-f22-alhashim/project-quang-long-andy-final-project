@@ -35,6 +35,11 @@ public class MinimaxAI_Test {
         board.playerChoose(false, 2, 2);
         board.playerChoose(true, 2, 1);
         board.playerChoose(false, 3, 1);
+        board.playerChoose(true, 1, 2);
+        board.playerChoose(false, 2, 3);
+        board.playerChoose(true, 3, 3);
+        board.playerChoose(false, 1, 3);
+        
         board.getPrinted();
         // board.playerChoose(true, 1, 2);
         // board.playerChoose(false, i, j)
