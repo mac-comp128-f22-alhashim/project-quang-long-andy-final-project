@@ -1,6 +1,7 @@
 package AdvancedXO;
 
 import java.awt.Color;
+import java.awt.Toolkit; // allows us to grab screen res 
 import java.io.File;
 import java.time.OffsetTime;
 
@@ -24,7 +25,7 @@ public class BigWindowCanvas {
     
     private BigBoard board;
     private CanvasWindow f; // "frame"
-    private int squareSize = 70;
+    private int squareSize = 66;
     private int offSet = squareSize*2; // top vertical space
     private int lw = (int)squareSize/20; // line width 
     private int winwidth;
@@ -40,19 +41,22 @@ public class BigWindowCanvas {
     private BigWindowCanvas(BigBoard board){
         this.board = board;
         
-        int rowNum = this.board.getSize();
-        int colNum = this.board.getSize();
+        int s = this.board.getSize();
 
-        winwidth = colNum * squareSize+2*lw;
-        winheight = offSet + rowNum * squareSize + 2*lw;
-
+        winwidth = s * squareSize+2*lw;
+        winheight = offSet + s * squareSize + 2*lw;
+        
+        int ScreenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        if (winheight > ScreenHeight){
+           updateParameters(ScreenHeight, s);
+        }
 
         f = new CanvasWindow("TTT", winwidth, winheight);
         Button x = new Button("getSize");
         x.onClick(()->diagprint());
         f.add(x,0,50);
 
-        setUpTest(rowNum, colNum);
+        setUpTest(s, s);
         f.onClick(event->mouseClick(event));
     }
 
@@ -206,7 +210,7 @@ public class BigWindowCanvas {
         }
 
         turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winheight/8);
         if (color==true){
             turnLabel.setFillColor(new Color(0,0,0,230));
         }
@@ -239,6 +243,14 @@ public class BigWindowCanvas {
     
     } 
 
+    private void updateParameters(int ScreenHeight, int s){
+        winheight = ScreenHeight;
+        squareSize = (ScreenHeight-50)/(s+2);
+        offSet = squareSize*2;
+        lw = (int)squareSize/20;
+        winwidth = s * squareSize+2*lw;
+    }
+
 
     private void makeSound(String location){
         try {
@@ -260,7 +272,7 @@ public class BigWindowCanvas {
     }
 
     public static void main (String[] args){
-        BigBoard a = new BigBoard(9);
+        BigBoard a = new BigBoard(20);
         BigWindowCanvas test = new BigWindowCanvas(a);
 
     }
@@ -269,7 +281,7 @@ public class BigWindowCanvas {
         uiGroup = new GraphicsGroup();
         for (int i = 0; i<colNum+1 ; i++){
             //vertical
-            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,winheight-3*lw);
+            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,(rowNum+2)*squareSize);
             line.setStrokeWidth(lw);
             Color c = new Color(60,128,180,100);
             line.setStrokeColor(c);
