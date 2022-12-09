@@ -21,7 +21,7 @@ import edu.macalester.graphics.events.*;
 public class WindowCanvasAI {
     
     private Board board;
-    private AIPlayler bot;
+    private MinimaxAI bot;
     private CanvasWindow f; // "frame"
     private int squareSize = 200;
     private int offSet = squareSize; // top vertical space
@@ -92,7 +92,7 @@ public class WindowCanvasAI {
                 if (r.isStroked()==false){
                     int row = (int)Math.floor(p.getX()/squareSize);
                     int col = (int)Math.floor((p.getY()-offSet)/squareSize);
-                    board.playerChoose(isPlayer0, col+1, row+1);
+                    board.markPosition('X', row, col);
                     r.setStroked(true);
                     addImage(row, col);
                     checkWin();
@@ -114,11 +114,11 @@ public class WindowCanvasAI {
         board.getPrinted();
         System.out.println(bot);
         f.pause(1000);
-        bot = new AIPlayler();
-        int[] move = bot.move(board);
+        bot = new MinimaxAI(false);
+        Integer[] move = bot.getBestMoves(board);
         int row = move[0];
         int col = move[1];
-        board.playerChoose(isPlayer0, move[0] + 1, move[1] + 1);
+        board.markPosition('O', move[0], move[1]);
         addImage(row, col);
         checkWin();
         makeSound("./res/soundfx/ding dong.wav");

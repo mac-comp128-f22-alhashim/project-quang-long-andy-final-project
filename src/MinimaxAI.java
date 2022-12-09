@@ -1,4 +1,4 @@
-package SimpleTTT;
+
 
 import java.util.Random;
 
