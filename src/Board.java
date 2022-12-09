@@ -31,12 +31,12 @@ public class Board {
 
     /**
      * 
-     * @param friendlyI
-     * @param friendlyJ
-     * @return get a mark at given friendly positions
+     * @param i
+     * @param j
+     * @return get a mark at given positions
      */
-    public char getPosition(int friendlyI, int friendlyJ) {
-        return board[friendlyI-1][friendlyJ-1];
+    public char getPosition(int i, int j) {
+        return board[i][j];
     }
     /**
      * 

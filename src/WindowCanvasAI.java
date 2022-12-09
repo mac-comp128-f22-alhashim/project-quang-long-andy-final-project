@@ -21,7 +21,7 @@ import edu.macalester.graphics.events.*;
 public class WindowCanvasAI {
     
     private Board board;
-    private AIPlayler aiPlayer;
+    private AIPlayler bot;
     private CanvasWindow f; // "frame"
     private int squareSize = 200;
     private int offSet = squareSize; // top vertical space
@@ -39,7 +39,6 @@ public class WindowCanvasAI {
 
     public WindowCanvasAI(Board board){
         this.board = board;
-        aiPlayer = new AIPlayler();
         int rowNum = this.board.getSize();
         int colNum = this.board.getSize();
 
@@ -54,7 +53,14 @@ public class WindowCanvasAI {
         f.add(x,0,50);
 
         setUpTest(rowNum, colNum);
-        f.onClick(event->mouseClick(event));
+
+        f.onClick(event-> {
+            mouseClick(event);
+            f.pause(1000);
+            AImove();
+
+        });
+
     }
 
     void diagprint(){
@@ -77,6 +83,7 @@ public class WindowCanvasAI {
        
 
     private void mouseClick(MouseButtonEvent event){
+
         Point p = event.getPosition();     
         if (p.getY()>offSet && isWon==false){
             GraphicsObject o = f.getElementAt(p);
@@ -90,13 +97,33 @@ public class WindowCanvasAI {
                     addImage(row, col);
                     checkWin();
                     makeSound("./res/soundfx/ding dong.wav");
+                    togglePlayer();
                 }
                 else{makeSound("./res/soundfx/click2.wav");}
+                
             }
             else{makeSound("./res/soundfx/click1.wav");}
         }
         else{makeSound("./res/soundfx/click2.wav");}
+        
         board.getPrinted();
+        
+    }
+
+    private void AImove(){
+        board.getPrinted();
+        System.out.println(bot);
+        f.pause(1000);
+        bot = new AIPlayler();
+        int[] move = bot.move(board);
+        int row = move[0];
+        int col = move[1];
+        board.playerChoose(isPlayer0, move[0] + 1, move[1] + 1);
+        addImage(row, col);
+        checkWin();
+        makeSound("./res/soundfx/ding dong.wav");
+        board.getPrinted();
+        togglePlayer();
     }
     
 
@@ -132,7 +159,7 @@ public class WindowCanvasAI {
         }
         else{
             if (board.getFilledCount()!= board.getSize()*board.getSize() ){
-                togglePlayer();
+                // togglePlayer();
             }
             else{
                 makeSound("./res/soundfx/fail.wav");
@@ -250,7 +277,7 @@ public class WindowCanvasAI {
 
     public static void main (String[] args){
         Board a = new Board();
-        WindowCanvas test = new WindowCanvas(a);
+        WindowCanvasAI test = new WindowCanvasAI(a);
 
     }
 

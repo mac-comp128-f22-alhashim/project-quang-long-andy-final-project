@@ -1,3 +1,3 @@
-# Project Title Goes Here
+# Project Tic Tac Toe Java
 
 Info about your project goes here
