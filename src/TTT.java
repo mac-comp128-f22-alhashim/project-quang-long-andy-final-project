@@ -8,6 +8,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
 
+import Board.Board;
 import edu.macalester.graphics.*;
 import edu.macalester.graphics.ui.*;
 import edu.macalester.graphics.events.*;
@@ -18,10 +19,9 @@ import edu.macalester.graphics.events.*;
 // This component attempts to create a window that visualizes the board
 // based on a 2d arrary imput.
 
-public class WindowCanvasAI {
+public class TTT {
     
     private Board board;
-    private AIPlayler aiPlayer;
     private CanvasWindow f; // "frame"
     private int squareSize = 200;
     private int offSet = squareSize; // top vertical space
@@ -37,9 +37,9 @@ public class WindowCanvasAI {
     private GraphicsGroup uiGroup;
 
 
-    public WindowCanvasAI(Board board){
+    public TTT(Board board){
         this.board = board;
-        aiPlayer = new AIPlayler();
+        
         int rowNum = this.board.getSize();
         int colNum = this.board.getSize();
 
@@ -118,28 +118,39 @@ public class WindowCanvasAI {
     }
 
     private void checkWin(){
-        if (board.checkWin() == 1 || board.checkWin() == 0){
+        if (board.checkWin() == 1){
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
-            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+            turnLabel = new GraphicsText("Player O won",winwidth/5,offSet/1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
             turnLabel.setFillColor(new Color(0,119,36,255));
-            turnLabel.setText("The End");
+            turnLabel.setText("Player O won");
+            f.add(turnLabel);
+
+            isWon = true;
+        } else if (board.checkWin() == 0) {
+            makeSound("./res/soundfx/win.wav");
+
+            f.remove(turnLabel);
+            turnLabel = new GraphicsText("Player X won",winwidth/5,offSet/1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
+            turnLabel.setFillColor(new Color(0,119,36,255));
+            turnLabel.setText("Player X won");
             f.add(turnLabel);
 
             isWon = true;
         }
-        else{
+        else {
             if (board.getFilledCount()!= board.getSize()*board.getSize() ){
                 togglePlayer();
             }
             else{
                 makeSound("./res/soundfx/fail.wav");
                 f.remove(turnLabel);
-                turnLabel = new GraphicsText("The End",winwidth/5,offSet/1.5);
+                turnLabel = new GraphicsText("Draw",winwidth/5,offSet/1.5);
                 turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
-                turnLabel.setText("The End");
+                turnLabel.setText("Draw");
                 turnLabel.setFillColor(new Color(192,0,0,220));
                 f.add(turnLabel);
 
@@ -250,7 +261,7 @@ public class WindowCanvasAI {
 
     public static void main (String[] args){
         Board a = new Board();
-        WindowCanvas test = new WindowCanvas(a);
+        TTT test = new TTT(a);
 
     }
 

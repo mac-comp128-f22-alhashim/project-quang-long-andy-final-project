@@ -1,3 +1,4 @@
+package Board;
 public class Board {
     private int size =3;
     private int filled = 0;

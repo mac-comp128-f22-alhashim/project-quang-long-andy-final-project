@@ -1,6 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
+import Board.AIPlayler;
+import Board.Board;
+
 public class testAI_3by3 {
     public static void main(String[] args) {
         Board board = new Board();

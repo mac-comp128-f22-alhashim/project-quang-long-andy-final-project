@@ -1,3 +1,4 @@
+package Board;
 import java.util.LinkedList;
 
 public class AIPlayler {

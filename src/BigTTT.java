@@ -1,4 +1,7 @@
+
+
 import java.awt.Color;
+import java.awt.Toolkit; // allows us to grab screen res 
 import java.io.File;
 import java.time.OffsetTime;
 
@@ -8,6 +11,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
 
+import AdvancedXO.BigBoard;
 import edu.macalester.graphics.*;
 import edu.macalester.graphics.ui.*;
 import edu.macalester.graphics.events.*;
@@ -18,13 +22,14 @@ import edu.macalester.graphics.events.*;
 // This component attempts to create a window that visualizes the board
 // based on a 2d arrary imput.
 
-public class WindowCanvas {
+public class BigTTT {
     
-    private Board board;
+    private BigBoard board;
     private CanvasWindow f; // "frame"
-    private int squareSize = 200;
-    private int offSet = squareSize; // top vertical space
-    private int lw = 7; // line width 
+    private static int boardSize = 12; // Size of the board now is 15 by 15
+    private int squareSize = 60;
+    private int offSet = squareSize*2; // top vertical space
+    private int lw = (int)squareSize/20; // line width 
     private int winwidth;
     private int winheight;
     private boolean isPlayer0 = true;
@@ -35,24 +40,25 @@ public class WindowCanvas {
 
     private GraphicsGroup uiGroup;
 
-
-    public WindowCanvas(Board board){
+    private BigTTT(BigBoard board){
         this.board = board;
         
-        int rowNum = this.board.getSize();
-        int colNum = this.board.getSize();
+        int s = this.board.getSize();
 
-        winwidth = colNum * squareSize + (colNum-1)*lw;
-        winheight = offSet + rowNum * squareSize + rowNum*lw;
-
+        winwidth = s * squareSize+2*lw;
+        winheight = offSet + s * squareSize + 2*lw;
+        
+        int ScreenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        if (winheight > ScreenHeight){
+           updateParameters(ScreenHeight, s);
+        }
 
         f = new CanvasWindow("TTT", winwidth, winheight);
-
         Button x = new Button("getSize");
         x.onClick(()->diagprint());
         f.add(x,0,50);
 
-        setUpTest(rowNum, colNum);
+        setUpTest(s, s);
         f.onClick(event->mouseClick(event));
     }
 
@@ -68,7 +74,8 @@ public class WindowCanvas {
             turnLabel.setText("O's turn");
             turnLabel.setFillColor(new Color(51,186,215,220));
         }
-        else {isPlayer0=true; 
+        else {
+            isPlayer0=true; 
             turnLabel.setText("X's turn");
             turnLabel.setFillColor(new Color(215,169,51,220));
     }
@@ -140,7 +147,7 @@ public class WindowCanvas {
 
             isWon = true;
         }
-        else {
+        else{
             if (board.getFilledCount()!= board.getSize()*board.getSize() ){
                 togglePlayer();
             }
@@ -148,7 +155,7 @@ public class WindowCanvas {
                 makeSound("./res/soundfx/fail.wav");
                 f.remove(turnLabel);
                 turnLabel = new GraphicsText("Draw",winwidth/5,offSet/1.5);
-                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
                 turnLabel.setText("Draw");
                 turnLabel.setFillColor(new Color(192,0,0,220));
                 f.add(turnLabel);
@@ -205,7 +212,7 @@ public class WindowCanvas {
         }
 
         turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winheight/8);
         if (color==true){
             turnLabel.setFillColor(new Color(0,0,0,230));
         }
@@ -238,6 +245,14 @@ public class WindowCanvas {
     
     } 
 
+    private void updateParameters(int ScreenHeight, int s){
+        winheight = ScreenHeight;
+        squareSize = (ScreenHeight-50)/(s+2);
+        offSet = squareSize*2;
+        lw = (int)squareSize/20;
+        winwidth = s * squareSize+2*lw;
+    }
+
 
     private void makeSound(String location){
         try {
@@ -257,10 +272,9 @@ public class WindowCanvas {
         }
     
     }
-
     public static void main (String[] args){
-        Board a = new Board();
-        WindowCanvas test = new WindowCanvas(a);
+        BigBoard a = new BigBoard(boardSize);
+        BigTTT test = new BigTTT(a);
 
     }
 
@@ -268,7 +282,7 @@ public class WindowCanvas {
         uiGroup = new GraphicsGroup();
         for (int i = 0; i<colNum+1 ; i++){
             //vertical
-            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,winheight-3*lw);
+            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,(rowNum+2)*squareSize);
             line.setStrokeWidth(lw);
             Color c = new Color(60,128,180,100);
             line.setStrokeColor(c);
@@ -298,7 +312,7 @@ public class WindowCanvas {
         f.add(uiGroup,0,0);
 
         turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/4);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
         if (color==true){
             turnLabel.setFillColor(new Color(0,0,0,230));
         }
@@ -313,7 +327,5 @@ public class WindowCanvas {
 
     private void reposition(){
         uiGroup.setCenter(f.getCenter());
-        f.draw();
-        f.pause(5);
     }
 }
