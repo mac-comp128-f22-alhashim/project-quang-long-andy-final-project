@@ -75,7 +75,7 @@ public class BigBoard {
         System.out.println();
         for (int i=0; i< this.size; i++) {
             for (int j=0; j< this.size; j++) {
-                System.out.print(board[i][j]+" ");
+                System.out.print(board[i][j]);
             }
             System.out.println();
         }
