@@ -21,7 +21,7 @@ import edu.macalester.graphics.events.*;
 public class WindowCanvasAI {
     
     private Board board;
-    private MinimaxAI bot;
+    private AIPlayler aiPlayer;
     private CanvasWindow f; // "frame"
     private int squareSize = 200;
     private int offSet = squareSize; // top vertical space
@@ -39,6 +39,7 @@ public class WindowCanvasAI {
 
     public WindowCanvasAI(Board board){
         this.board = board;
+        aiPlayer = new AIPlayler();
         int rowNum = this.board.getSize();
         int colNum = this.board.getSize();
 
@@ -53,14 +54,7 @@ public class WindowCanvasAI {
         f.add(x,0,50);
 
         setUpTest(rowNum, colNum);
-
-        f.onClick(event-> {
-            mouseClick(event);
-            f.pause(1000);
-            AImove();
-
-        });
-
+        f.onClick(event->mouseClick(event));
     }
 
     void diagprint(){
@@ -83,7 +77,6 @@ public class WindowCanvasAI {
        
 
     private void mouseClick(MouseButtonEvent event){
-
         Point p = event.getPosition();     
         if (p.getY()>offSet && isWon==false){
             GraphicsObject o = f.getElementAt(p);
@@ -92,38 +85,18 @@ public class WindowCanvasAI {
                 if (r.isStroked()==false){
                     int row = (int)Math.floor(p.getX()/squareSize);
                     int col = (int)Math.floor((p.getY()-offSet)/squareSize);
-                    board.markPosition('X', row, col);
+                    board.playerChoose(isPlayer0, col+1, row+1);
                     r.setStroked(true);
                     addImage(row, col);
                     checkWin();
                     makeSound("./res/soundfx/ding dong.wav");
-                    togglePlayer();
                 }
                 else{makeSound("./res/soundfx/click2.wav");}
-                
             }
             else{makeSound("./res/soundfx/click1.wav");}
         }
         else{makeSound("./res/soundfx/click2.wav");}
-        
         board.getPrinted();
-        
-    }
-
-    private void AImove(){
-        board.getPrinted();
-        System.out.println(bot);
-        f.pause(1000);
-        bot = new MinimaxAI(false);
-        Integer[] move = bot.getBestMoves(board);
-        int row = move[0];
-        int col = move[1];
-        board.markPosition('O', move[0], move[1]);
-        addImage(row, col);
-        checkWin();
-        makeSound("./res/soundfx/ding dong.wav");
-        board.getPrinted();
-        togglePlayer();
     }
     
 
@@ -159,7 +132,7 @@ public class WindowCanvasAI {
         }
         else{
             if (board.getFilledCount()!= board.getSize()*board.getSize() ){
-                // togglePlayer();
+                togglePlayer();
             }
             else{
                 makeSound("./res/soundfx/fail.wav");
@@ -277,7 +250,7 @@ public class WindowCanvasAI {
 
     public static void main (String[] args){
         Board a = new Board();
-        WindowCanvasAI test = new WindowCanvasAI(a);
+        WindowCanvas test = new WindowCanvas(a);
 
     }
 
