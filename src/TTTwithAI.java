@@ -1,11 +1,10 @@
 // Player vs Bot (in the terminal)
 // Note: To decide who goes first, refer to line 10. Change the value to true or false.
-//      True ~ Human will go first, False ~ Human will go after Bot
+// True ~ Human will go first, False ~ Human will go after Bot
 
 // If you notice, I repeat the check win conditions 4 times in the main.
-// But I cannot find a way to write a child method that can break the parent method so I just copy-paste
-// the function. 
-
+// But I cannot find a way to write a child method that can break the parent method so I just
+// copy-paste the function.
 
 
 import java.util.HashMap;

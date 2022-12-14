@@ -1,7 +1,7 @@
 
 
 import java.awt.Color;
-import java.awt.Toolkit; // allows us to grab screen res 
+import java.awt.Toolkit; // allows us to grab screen res
 import java.io.File;
 import java.time.OffsetTime;
 
@@ -17,19 +17,17 @@ import edu.macalester.graphics.ui.*;
 import edu.macalester.graphics.events.*;
 
 
-
-
 // This component attempts to create a window that visualizes the board
 // based on a 2d arrary imput.
 
 public class BigTTT {
-    
+
     private BigBoard board;
     private CanvasWindow f; // "frame"
     private static int boardSize = 12; // Size of the board now is 15 by 15
     private int squareSize = 60;
-    private int offSet = squareSize*2; // top vertical space
-    private int lw = (int)squareSize/20; // line width 
+    private int offSet = squareSize * 2; // top vertical space
+    private int lw = (int) squareSize / 20; // line width
     private int winwidth;
     private int winheight;
     private boolean isPlayer0 = true;
@@ -40,97 +38,103 @@ public class BigTTT {
 
     private GraphicsGroup uiGroup;
 
-    private BigTTT(BigBoard board){
+    public static void main(String[] args) {
+        BigBoard a = new BigBoard(boardSize);
+        new BigTTT(a);
+    }
+
+    private BigTTT(BigBoard board) {
         this.board = board;
-        
+
         int s = this.board.getSize();
 
-        winwidth = s * squareSize+2*lw;
-        winheight = offSet + s * squareSize + 2*lw;
-        
+        winwidth = s * squareSize + 2 * lw;
+        winheight = offSet + s * squareSize + 2 * lw;
+
         int ScreenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-        if (winheight > ScreenHeight){
-           updateParameters(ScreenHeight, s);
+        if (winheight > ScreenHeight) {
+            updateParameters(ScreenHeight, s);
         }
 
         f = new CanvasWindow("TTT", winwidth, winheight);
         Button x = new Button("getSize");
-        x.onClick(()->diagprint());
-        f.add(x,0,50);
+        x.onClick(() -> diagprint());
+        f.add(x, 0, 50);
 
         setUpTest(s, s);
-        f.onClick(event->mouseClick(event));
+        f.onClick(event -> mouseClick(event));
     }
 
-    void diagprint(){
-        System.out.println(f.getHeight()+" .  " + f.getWidth());
+    void diagprint() {
+        System.out.println(f.getHeight() + " .  " + f.getWidth());
         reposition();
     }
 
-    private void togglePlayer(){
-        turnLabel.setFont("Helvetica",FontStyle.BOLD_ITALIC, winwidth/8);
+    private void togglePlayer() {
+        turnLabel.setFont("Helvetica", FontStyle.BOLD_ITALIC, winwidth / 8);
         if (isPlayer0 == true) {
-            isPlayer0 = false; 
+            isPlayer0 = false;
             turnLabel.setText("O's turn");
-            turnLabel.setFillColor(new Color(51,186,215,220));
-        }
-        else {
-            isPlayer0=true; 
+            turnLabel.setFillColor(new Color(51, 186, 215, 220));
+        } else {
+            isPlayer0 = true;
             turnLabel.setText("X's turn");
-            turnLabel.setFillColor(new Color(215,169,51,220));
+            turnLabel.setFillColor(new Color(215, 169, 51, 220));
+        }
     }
-    }
-       
 
-    private void mouseClick(MouseButtonEvent event){
-        Point p = event.getPosition();     
-        if (p.getY()>offSet && isWon==false){
+
+    private void mouseClick(MouseButtonEvent event) {
+        Point p = event.getPosition();
+        if (p.getY() > offSet && isWon == false) {
             GraphicsObject o = f.getElementAt(p);
-            if (o instanceof Rectangle){
+            if (o instanceof Rectangle) {
                 Rectangle r = (Rectangle) o;
-                if (r.isStroked()==false){
-                    int row = (int)Math.floor(p.getX()/squareSize);
-                    int col = (int)Math.floor((p.getY()-offSet)/squareSize);
-                    board.playerChoose(isPlayer0, col+1, row+1);
+                if (r.isStroked() == false) {
+                    int row = (int) Math.floor(p.getX() / squareSize);
+                    int col = (int) Math.floor((p.getY() - offSet) / squareSize);
+                    board.playerChoose(isPlayer0, col + 1, row + 1);
                     r.setStroked(true);
                     addImage(row, col);
                     checkWin();
                     makeSound("./res/soundfx/ding dong.wav");
+                } else {
+                    makeSound("./res/soundfx/click2.wav");
                 }
-                else{makeSound("./res/soundfx/click2.wav");}
+            } else {
+                makeSound("./res/soundfx/click1.wav");
             }
-            else{makeSound("./res/soundfx/click1.wav");}
+        } else {
+            makeSound("./res/soundfx/click2.wav");
         }
-        else{makeSound("./res/soundfx/click2.wav");}
         board.getPrinted();
     }
-    
 
-    private void addImage(int row, int col){
-        if (isPlayer0==true){
-            double x = row*squareSize+lw+squareSize*.05;
-            double y = offSet+col*squareSize+lw;
-            Image a = new Image(x, y,"./imgs/X.png");
-            a.setMaxWidth(squareSize*.9);
+
+    private void addImage(int row, int col) {
+        if (isPlayer0 == true) {
+            double x = row * squareSize + lw + squareSize * .05;
+            double y = offSet + col * squareSize + lw;
+            Image a = new Image(x, y, "./imgs/X.png");
+            a.setMaxWidth(squareSize * .9);
             f.add(a);
-        }
-        else{
-            double x = row*squareSize+lw+squareSize*.05;
-            double y = offSet+col*squareSize+lw;
-            Image a = new Image(x, y,"./imgs/O.png");
-            a.setMaxWidth(squareSize*.9);
+        } else {
+            double x = row * squareSize + lw + squareSize * .05;
+            double y = offSet + col * squareSize + lw;
+            Image a = new Image(x, y, "./imgs/O.png");
+            a.setMaxWidth(squareSize * .9);
             f.add(a);
         }
     }
 
-    private void checkWin(){
-        if (board.checkWin() == 1){
+    private void checkWin() {
+        if (board.checkWin() == 1) {
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("Player O won",winwidth/5,offSet/1.5);
-            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
-            turnLabel.setFillColor(new Color(0,119,36,255));
+            turnLabel = new GraphicsText("Player O won", winwidth / 5, offSet / 1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth / 8);
+            turnLabel.setFillColor(new Color(0, 119, 36, 255));
             turnLabel.setText("Player O won");
             f.add(turnLabel);
 
@@ -139,193 +143,186 @@ public class BigTTT {
             makeSound("./res/soundfx/win.wav");
 
             f.remove(turnLabel);
-            turnLabel = new GraphicsText("Player X won",winwidth/5,offSet/1.5);
-            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
-            turnLabel.setFillColor(new Color(0,119,36,255));
+            turnLabel = new GraphicsText("Player X won", winwidth / 5, offSet / 1.5);
+            turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth / 8);
+            turnLabel.setFillColor(new Color(0, 119, 36, 255));
             turnLabel.setText("Player X won");
             f.add(turnLabel);
 
             isWon = true;
-        }
-        else{
-            if (board.getFilledCount()!= board.getSize()*board.getSize() ){
+        } else {
+            if (board.getFilledCount() != board.getSize() * board.getSize()) {
                 togglePlayer();
-            }
-            else{
+            } else {
                 makeSound("./res/soundfx/fail.wav");
                 f.remove(turnLabel);
-                turnLabel = new GraphicsText("Draw",winwidth/5,offSet/1.5);
-                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
+                turnLabel = new GraphicsText("Draw", winwidth / 5, offSet / 1.5);
+                turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth / 8);
                 turnLabel.setText("Draw");
-                turnLabel.setFillColor(new Color(192,0,0,220));
+                turnLabel.setFillColor(new Color(192, 0, 0, 220));
                 f.add(turnLabel);
 
                 isWon = true;
             }
         }
-        if (isWon==true){
-            Button b  = new Button("restart");
+        if (isWon == true) {
+            Button b = new Button("restart");
             b.setPosition(f.getCenter());
             b.setScale(100);
-            b.onClick(()->restart());
-            f.add(b,winwidth/2-b.getScaleX()/2,3*offSet/4);
+            b.onClick(() -> restart());
+            f.add(b, winwidth / 2 - b.getScaleX() / 2, 3 * offSet / 4);
         }
     }
 
-    private void restart(){
-        isWon=false;
-        isPlayer0=true;
+    private void restart() {
+        isWon = false;
+        isPlayer0 = true;
         f.removeAll();
         board.resetBoard();
         setUp(board.getSize(), board.getSize());
         makeSound("./res/soundfx/restart.wav");
     }
-    
-    private void setUp(int rowNum, int colNum){
-        for (int i = 0; i<colNum+1 ; i++){
-            //vertical
-            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,winheight-3*lw);
+
+    private void setUp(int rowNum, int colNum) {
+        for (int i = 0; i < colNum + 1; i++) {
+            // vertical
+            Line line = new Line(i * squareSize + lw, offSet, i * squareSize + lw, winheight - 3 * lw);
             line.setStrokeWidth(lw);
-            Color c = new Color(60,128,180,100);
-            line.setStrokeColor(c);
-            f.add(line);
-        }
-        
-        for (int i = 0; i<rowNum+1;i++){
-            //horizontal
-            Line line = new Line(lw, offSet+i*squareSize,winwidth-lw,offSet+i*squareSize);
-            line.setStrokeWidth(lw);
-            Color c = new Color(60,128,180,100);
+            Color c = new Color(60, 128, 180, 100);
             line.setStrokeColor(c);
             f.add(line);
         }
 
-        for (int i = 0; i<colNum; i++){
-            for (int j = 0; j<rowNum; j++){
-                double x = i*squareSize+lw+squareSize*.05;
-                double y = j*squareSize+offSet+.05*squareSize;
-                Rectangle r = new Rectangle(x, y, squareSize*.9,squareSize*.9);
-                r.setFillColor(new Color(101,177,51,30));
+        for (int i = 0; i < rowNum + 1; i++) {
+            // horizontal
+            Line line = new Line(lw, offSet + i * squareSize, winwidth - lw, offSet + i * squareSize);
+            line.setStrokeWidth(lw);
+            Color c = new Color(60, 128, 180, 100);
+            line.setStrokeColor(c);
+            f.add(line);
+        }
+
+        for (int i = 0; i < colNum; i++) {
+            for (int j = 0; j < rowNum; j++) {
+                double x = i * squareSize + lw + squareSize * .05;
+                double y = j * squareSize + offSet + .05 * squareSize;
+                Rectangle r = new Rectangle(x, y, squareSize * .9, squareSize * .9);
+                r.setFillColor(new Color(101, 177, 51, 30));
                 r.setStroked(false);
                 f.add(r);
             }
         }
 
-        turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winheight/8);
-        if (color==true){
-            turnLabel.setFillColor(new Color(0,0,0,230));
+        turnLabel = new GraphicsText("Begin", winwidth / 4, offSet / 1.5);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winheight / 8);
+        if (color == true) {
+            turnLabel.setFillColor(new Color(0, 0, 0, 230));
+        } else {
+            turnLabel.setFillColor(new Color(226, 226, 226, 230));
         }
-        else  {turnLabel.setFillColor(new Color(226,226,226,230));}
         f.add(turnLabel);
 
         t = new Button("Change Color");
-        t.onClick(()-> toggleColor());
-        t.setScale(10,10);
-        f.add(t,0,10);
+        t.onClick(() -> toggleColor());
+        t.setScale(10, 10);
+        f.add(t, 0, 10);
     }
 
 
-
-    private void toggleColor(){
+    private void toggleColor() {
         makeSound("./res/soundfx/restart.wav");
-      
-        if (color==true){
-            f.setBackground(new Color(0,0,0,220));
-            if (turnLabel.getText().toLowerCase().equals("begin")){
-                turnLabel.setFillColor(new Color(226,226,226,230));}
-            color=false;
-        }
-        else{
-            f.setBackground(new Color(255,255,255,255));
-            if (turnLabel.getText().toLowerCase().equals("begin")){
-                turnLabel.setFillColor(new Color(0,0,0,230));}
+
+        if (color == true) {
+            f.setBackground(new Color(0, 0, 0, 220));
+            if (turnLabel.getText().toLowerCase().equals("begin")) {
+                turnLabel.setFillColor(new Color(226, 226, 226, 230));
+            }
+            color = false;
+        } else {
+            f.setBackground(new Color(255, 255, 255, 255));
+            if (turnLabel.getText().toLowerCase().equals("begin")) {
+                turnLabel.setFillColor(new Color(0, 0, 0, 230));
+            }
             color = true;
         }
-    
-    } 
 
-    private void updateParameters(int ScreenHeight, int s){
+    }
+
+    private void updateParameters(int ScreenHeight, int s) {
         winheight = ScreenHeight;
-        squareSize = (ScreenHeight-50)/(s+2);
-        offSet = squareSize*2;
-        lw = (int)squareSize/20;
-        winwidth = s * squareSize+2*lw;
+        squareSize = (ScreenHeight - 50) / (s + 2);
+        offSet = squareSize * 2;
+        lw = (int) squareSize / 20;
+        winwidth = s * squareSize + 2 * lw;
     }
 
 
-    private void makeSound(String location){
+    private void makeSound(String location) {
         try {
             File f = new File(location);
-            if (f.exists()){
+            if (f.exists()) {
                 AudioInputStream ip = AudioSystem.getAudioInputStream(f);
                 Clip clip = AudioSystem.getClip();
                 clip.open(ip);
                 clip.start();
-            }
-            else{
+            } else {
                 System.out.println("can't find file");
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-    
-    }
-    public static void main (String[] args){
-        BigBoard a = new BigBoard(boardSize);
-        BigTTT test = new BigTTT(a);
 
     }
 
-    private void setUpTest(int rowNum, int colNum){
+    private void setUpTest(int rowNum, int colNum) {
         uiGroup = new GraphicsGroup();
-        for (int i = 0; i<colNum+1 ; i++){
-            //vertical
-            Line line = new Line(i*squareSize+lw, offSet, i*squareSize+lw,(rowNum+2)*squareSize);
+        for (int i = 0; i < colNum + 1; i++) {
+            // vertical
+            Line line = new Line(i * squareSize + lw, offSet, i * squareSize + lw, (rowNum + 2) * squareSize);
             line.setStrokeWidth(lw);
-            Color c = new Color(60,128,180,100);
-            line.setStrokeColor(c);
-            uiGroup.add(line);
-        }
-        
-        for (int i = 0; i<rowNum+1;i++){
-            //horizontal
-            Line line = new Line(lw, offSet+i*squareSize,winwidth-lw,offSet+i*squareSize);
-            line.setStrokeWidth(lw);
-            Color c = new Color(60,128,180,100);
+            Color c = new Color(60, 128, 180, 100);
             line.setStrokeColor(c);
             uiGroup.add(line);
         }
 
-        for (int i = 0; i<colNum; i++){
-            for (int j = 0; j<rowNum; j++){
-                double x = i*squareSize+lw+squareSize*.05;
-                double y = j*squareSize+offSet+.05*squareSize;
-                Rectangle r = new Rectangle(x, y, squareSize*.9,squareSize*.9);
-                r.setFillColor(new Color(101,177,51,30));
+        for (int i = 0; i < rowNum + 1; i++) {
+            // horizontal
+            Line line = new Line(lw, offSet + i * squareSize, winwidth - lw, offSet + i * squareSize);
+            line.setStrokeWidth(lw);
+            Color c = new Color(60, 128, 180, 100);
+            line.setStrokeColor(c);
+            uiGroup.add(line);
+        }
+
+        for (int i = 0; i < colNum; i++) {
+            for (int j = 0; j < rowNum; j++) {
+                double x = i * squareSize + lw + squareSize * .05;
+                double y = j * squareSize + offSet + .05 * squareSize;
+                Rectangle r = new Rectangle(x, y, squareSize * .9, squareSize * .9);
+                r.setFillColor(new Color(101, 177, 51, 30));
                 r.setStroked(false);
                 uiGroup.add(r);
             }
         }
 
-        f.add(uiGroup,0,0);
+        f.add(uiGroup, 0, 0);
 
-        turnLabel = new GraphicsText("Begin",winwidth/4,offSet/1.5);
-        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth/8);
-        if (color==true){
-            turnLabel.setFillColor(new Color(0,0,0,230));
+        turnLabel = new GraphicsText("Begin", winwidth / 4, offSet / 1.5);
+        turnLabel.setFont("Signpainter,American TypeWriter, Tahoma", FontStyle.BOLD, winwidth / 8);
+        if (color == true) {
+            turnLabel.setFillColor(new Color(0, 0, 0, 230));
+        } else {
+            turnLabel.setFillColor(new Color(226, 226, 226, 230));
         }
-        else  {turnLabel.setFillColor(new Color(226,226,226,230));}
         f.add(turnLabel);
 
         t = new Button("Change Color");
-        t.onClick(()-> toggleColor());
-        t.setScale(10,10);
-        f.add(t,0,10);
+        t.onClick(() -> toggleColor());
+        t.setScale(10, 10);
+        f.add(t, 0, 10);
     }
 
-    private void reposition(){
+    private void reposition() {
         uiGroup.setCenter(f.getCenter());
     }
 }
