@@ -25,7 +25,7 @@ This game is a Java version of the Tic Tac Toe game. This game has:
 ![](https://i.imgur.com/x3xgt89.gif)
 
 #### MiniMax AI
-![](https://i.imgur.com/lLtITsD.gif)
+![](https://i.imgur.com/rv0CtXZ.gif)
 
 
 ## Challenges
