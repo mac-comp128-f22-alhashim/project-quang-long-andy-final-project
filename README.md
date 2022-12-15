@@ -36,13 +36,13 @@ This game is a Java version of the Tic Tac Toe game. This game has:
 #### <bold>MiniMax AI:</bold>
 ![](https://i.imgur.com/rv0CtXZ.gif)
 
-## Explain the Minimax Algorithm
+## 3.Explain the Minimax Algorithm
 Reference video: https://www.youtube.com/watch?v=trKjYdBASyQ&t=1232s \
 In general, the Minimax algorithm simply thinks many moves ahead and find the most optimal move. 
 (Kinda like thr Dr.Strange's view of 14,000,605 possible outcomes). \
 In details, Each state of the game has a unidentified score. And we find the score of a state by finding the minimum/ maximum score of the nextest possible states. Or if the base case is reached, meaning the game state already has a clear result, we can declare the score. Then, depending what player the AI is, maximizing (plays as X) or minimizing (plays as O), it finds the move that yields minimum/ maximum to play. 
 
-## Challenges (Time limited)
+## 4.Challenges (Time limited)
 - The codebase is not clean enough 
 - There are some bugs that are not fixed 
 - Adapt the code base of the new `Board` architect and the `AI` to the GUI
