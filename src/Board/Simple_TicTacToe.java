@@ -1,11 +1,8 @@
 package Board;
-
-import java.util.ArrayList;
 import java.util.Scanner;
 
 class Simple_TicTacToe {
     private static Board board;
-    private static ArrayList<Character> playerMark;
 
     public static void main(String[] args) {
         board = new Board();
